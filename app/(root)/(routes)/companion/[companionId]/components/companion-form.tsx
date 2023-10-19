@@ -1,13 +1,16 @@
 "use client"
 
 import * as z from "zod";
-import {useForm} from "react-hook-form";
+import { useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Companion, Category } from "@prisma/client";
-import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel, FormDescription } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { ImageUpload } from "@/components/image-upload";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+
 
 interface CompanionFormProps {
     initialData: Companion | null;
@@ -71,24 +74,98 @@ export const CompanionForm = ({
                     <FormField
                         name = "src"
                         render = {({field}) => ( 
-                            <FormItem className="flex flex-col items-center justify-center space-y-4">
+                            <FormItem className="flex flex-col items-center justify-center space-y-4 mt-4">
                             <FormControl>
                                 <ImageUpload disabled={isLoading} onChange={field.onChange} value={field.value} />
                             </FormControl>
                             < FormMessage/>
                             </FormItem>
                         )}/>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
                             <FormField name="name" control={form.control} render={({field}) => (<FormItem className="col-span-2 md:col-span-1">
                                 <FormLabel>Name</FormLabel>
+                                < FormDescription>
+                                  Give your AI companion a name
+                                </FormDescription>
                                 <FormControl>
                                     <Input
+                                    className="bg-background"
                                     disabled={isLoading}
-                                    placeholder="Elon Musk"
+                                    placeholder="e.g. Bill Gates"
                                     {...field}/>
                                 </FormControl>
+                                <FormMessage/>
                             </FormItem>)}></FormField>
-
+                            <FormField name="description" control={form.control} render={({field}) => (<FormItem className="col-span-2 md:col-span-1">
+                                <FormLabel>Description</FormLabel>
+                                < FormDescription>
+                                  Describe your AI companion
+                                </FormDescription>
+                                <FormControl>
+                                    <Input
+                                    className="bg-background"
+                                    disabled={isLoading}
+                                    placeholder="e.g. Founder and Former CEO of Microsoft"
+                                    {...field}/>
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>)}></FormField>
+                            <FormField name="categoryId" control={form.control} render={({field}) => (<FormItem className="col-span-2 md:col-span-1">
+                                <FormLabel>Category</FormLabel>
+                                < FormDescription>
+                                  Select a category for your AI companion
+                                </FormDescription>
+                                <Select
+                                disabled={isLoading}
+                                onValueChange={field.onChange}
+                                value={field.value}
+                                defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger className="bg-background">
+                                            <SelectValue 
+                                                defaultValue={field.value}
+                                                placeholder="Select a category"
+                                            />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {categories.map((category) => (
+                                            <SelectItem
+                                                key={category.id}
+                                                value={category.id}>
+                                                    {category.name}
+                                                </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormItem>)}></FormField>
+                        </div>
+                        <div className="space-y-2 w-full">
+                            <div>
+                                <h3 className="mt-6 text-lg font-medium">
+                                    Configuration
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Configure your AI companion
+                                </p>
+                            </div>
+                            <Separator className="bg-primary/10"/>
+                        </div>
+                        <div className="mt-4">
+                        <FormField name="instructions" control={form.control} render={({field}) => (<FormItem className="col-span-2 md:col-span-1">
+                                <FormLabel>Instructions</FormLabel>
+                                < FormDescription>
+                                  Describe your AI companion
+                                </FormDescription>
+                                <FormControl>
+                                    <Textarea
+                                    className="bg-background resize-none"
+                                    rows={7}
+                                    placeholder="e.g. TODO"
+                                    {...field}/>
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>)}></FormField>
                         </div>
                 </form>
             </Form>
