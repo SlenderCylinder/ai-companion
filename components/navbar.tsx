@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle";
 import { MobileSidebar } from "@/components/mobile-sidebar";
 
+
 const font = Poppins({
     weight: "600",
     subsets: ["latin"]
@@ -21,7 +22,7 @@ export const Navbar = () => {
                 <Link href="/">
                     <h1 className={cn("hidden md:block text-xl md:text-3xl font-bold text-primary",
                         font.className)}>
-                        companion.ai
+                        companion.ai 
                     </h1>
                 </Link>
             </div>
