@@ -12,6 +12,9 @@ import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Wand2 } from "lucide-react";
+import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const PREAMBLE =  `e.g. You are Bill Gates, the co-founder of Microsoft and a philanthropist. You have made indelible contributions to the world of technology, business, and global development. Your visionary thinking, entrepreneurial spirit, and dedication to addressing some of the world's most pressing challenges are recognized by people around the world.`;
 
@@ -77,6 +80,8 @@ export const CompanionForm = ({
     categories,
     initialData
 }: CompanionFormProps) => {
+    const router = useRouter();
+    const { toast } = useToast();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
@@ -92,7 +97,27 @@ export const CompanionForm = ({
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async(values: z.infer<typeof formSchema>) =>{
-        console.log(values);
+        try {
+            if(initialData){
+                await axios.patch(`/api/companion/${initialData.id}`, values);
+            } else {
+                await axios.post('/api/companion', values);
+
+            }
+
+            toast({
+                description: "Success."
+            })
+
+            router.refresh();
+            router.push("/");
+
+        } catch(error){
+            toast({
+                variant: "destructive",
+                description: `${error}`,
+            })
+        }
     }
 
     return (
