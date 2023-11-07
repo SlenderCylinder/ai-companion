@@ -16,7 +16,20 @@ export async function POST(req: Request) {
             return new NextResponse("Missing required parameters", { status:400 })
         }
 
-        const companion = await prismadb
+        const companion = await prismadb.companion.create({
+            data: {
+                categoryId,
+                userId: user.id,
+                userName: user.firstName,
+                src,
+                name,
+                description,
+                instructions,
+                seed
+            }
+        });
+
+        return NextResponse.json(companion)
 
     } catch(error) {
         console.log("[COMPANION_POST]", error);
