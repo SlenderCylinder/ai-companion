@@ -22,7 +22,10 @@ export async function PATCH(
             return new NextResponse("Missing required parameters", { status:400 })
         }
 
-        const companion = await prismadb.companion.create({
+        const companion = await prismadb.companion.update ({
+            where: {
+                id: params.companionId,
+            },
             data: {
                 categoryId,
                 userId: user.id,
@@ -38,7 +41,7 @@ export async function PATCH(
         return NextResponse.json(companion)
 
     } catch(error) {
-        console.log("[COMPANION_POST]", error);
+        console.log("[COMPANION_PATCH]", error);
         return new NextResponse("Internal Error", {status: 500});
     }
 }
