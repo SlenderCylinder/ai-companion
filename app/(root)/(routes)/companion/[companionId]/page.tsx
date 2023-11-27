@@ -8,7 +8,6 @@ interface CompanionIdPageProps {
 }
 
 const CompanionIdPage = async ({params}: CompanionIdPageProps) => {
-    //TODO
     
     const companion = await prismadb.companion.findUnique({
         where: {
