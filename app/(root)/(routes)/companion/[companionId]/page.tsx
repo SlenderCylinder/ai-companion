@@ -1,27 +1,43 @@
+import { SearchInput } from "@/components/search-input";
 import prismadb from "@/lib/prismadb";
-import { CompanionForm } from "./components/companion-form";
+import { Categories } from "@/components/categories";
 
-interface CompanionIdPageProps {
-    params: {
-        companionId: string;
+
+interface RootPageProps {
+    searchParams: {
+        categoryId: string;
+        name: string;
     }
 }
 
-const CompanionIdPage = async ({params}: CompanionIdPageProps) => {
-    
-    const companion = await prismadb.companion.findUnique({
+const RootPage = async ({
+    searchParams
+}: RootPageProps) => {
+    const data = await prismadb.companion.findMany({
         where: {
-            id: params.companionId,
+            categoryId: searchParams.categoryId,
+            name: {
+                search: searchParams.name
+            }
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            _count: {
+                select: {
+                    messages: true
+                }
+            }
         }
     })
-
     const categories = await prismadb.category.findMany();
-    
-    return(
-        <CompanionForm
-        initialData={companion}
-        categories={categories}/>
+    return (
+        <div className="h-full p-4 space-y-2">
+           <SearchInput/>
+           <Categories data={categories} />
+        </div>
     );
 }
 
-export default CompanionIdPage;
+export default RootPage;
