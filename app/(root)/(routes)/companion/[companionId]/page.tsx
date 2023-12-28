@@ -1,47 +1,44 @@
-import { SearchInput } from "@/components/search-input";
+import { redirect } from "next/navigation";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
+
 import prismadb from "@/lib/prismadb";
-import { Companions } from "@/components/companions";
-import { Categories } from "@/components/categories";
+//import { checkSubscription } from "@/lib/subscription";
 
+import { CompanionForm } from "./components/companion-form";
 
-interface RootPageProps {
-    searchParams: {
-        categoryId: string;
-        name: string;
+interface CompanionIdPageProps {
+  params: {
+    companionId: string;
+  };
+};
+
+const CompanionIdPage = async ({
+  params
+}: CompanionIdPageProps) => {
+  const { userId } = auth();
+
+  if (!userId) {
+    return redirectToSignIn();
+  }
+
+  //const validSubscription = await checkSubscription();
+
+//   if (!validSubscription) {
+//     return redirect("/");
+//   }
+
+  const companion = await prismadb.companion.findUnique({
+    where: {
+      id: params.companionId,
+      userId,
     }
+  });
+
+  const categories = await prismadb.category.findMany();
+
+  return ( 
+    <CompanionForm initialData={companion} categories={categories} />
+  );
 }
-
-const RootPage = async ({
-    searchParams
-}: RootPageProps) => {
-    const data = await prismadb.companion.findMany({
-        where: {
-            categoryId: searchParams.categoryId,
-            name: {
-                search: searchParams.name
-            }
-        },
-        orderBy: {
-            createdAt: "desc"
-        },
-        include: {
-            _count: {
-                select: {
-                    messages: true
-                }
-            }
-        }
-    })
-
-    const categories = await prismadb.category.findMany();
-    //fix this  
-    return (
-        <div className="h-full p-4 space-y-2">
-           <SearchInput/>
-           <Categories data={categories} />
-           <Companions data = {data} />
-        </div>
-    );
-}
-
-export default RootPage;
+ 
+export default CompanionIdPage;
