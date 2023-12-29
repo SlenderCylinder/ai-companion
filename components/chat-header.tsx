@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { BotAvatar } from "./bot-avatar";
 import { useUser } from "@clerk/nextjs";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useToast } from "./ui/use-toast";
+import axios from "axios";
 
 interface ChatHeaderProps {
     companion: Companion & {
@@ -21,6 +23,15 @@ export const ChatHeader = ({companion}: ChatHeaderProps) => {
 
     const router = useRouter();
     const {user} = useUser();
+    const { toast } = useToast();
+
+    const onDelete = async () => {
+        try {
+            await axios.delete(`/api/companions/${companion.id}`)
+        } catch (error) {
+            toast({description: `Something went wrong. ${error}`, variant: "destructive"});
+        }
+    };
 
     return (
         <div className= "flex w-full justify-between items-center border-b border-primary/10 pb-4">
@@ -56,7 +67,7 @@ export const ChatHeader = ({companion}: ChatHeaderProps) => {
                             <Edit className="w-4 h-4 mr-2"/>
                             Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={onDelete}>
                             <Trash className="w-4 h-4 mr-2"/>
                             Delete
                         </DropdownMenuItem>
