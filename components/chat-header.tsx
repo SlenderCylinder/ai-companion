@@ -9,6 +9,7 @@ import { useUser } from "@clerk/nextjs";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "./ui/use-toast";
 import axios from "axios";
+import { Navbar } from "./navbar";
 
 interface ChatHeaderProps {
     companion: Companion & {

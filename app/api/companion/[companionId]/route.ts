@@ -25,6 +25,7 @@ export async function PATCH(
         const companion = await prismadb.companion.update ({
             where: {
                 id: params.companionId,
+                userId: user.id,
             },
             data: {
                 categoryId,
@@ -69,5 +70,6 @@ export async function DELETE(
     } catch (error) {
         console.log("[COMPANION_DELETE", error);
         return new NextResponse("Internal Error", {status: 500});
+        //add more routes
     }
 }
