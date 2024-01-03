@@ -3,7 +3,7 @@
 import { Companion, Message} from "@prisma/client"
 import { ChatHeader } from "@/components/chat-header"
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useCompletion } from "ai/react"
 
 interface ChatClientProps{
@@ -19,10 +19,33 @@ export const ChatClient = ({companion}: ChatClientProps) => {
 
     const router = useRouter();
     const [messages, setMessages] = useState<any[]>(companion.messages);
-    const {} = useCompletion();
+    const {input, isLoading, handleInputChange, handleSubmit, setInput} = useCompletion(
+        {api:`/api/chat/${companion.id}`, onFinish(prompt, completion) {
+            const systemMessage = {
+                role: "system",
+                content: completion,
+            }
+
+            setMessages((current) => [...current, systemMessage]);
+            setInput("");
+
+            router.refresh();
+    }});
+
+    const onSubmit = (E: FormEvent<HTMLFormElement>) => {
+        const userMessage = {
+            role: "user",
+            content: input,
+        };
+
+        setMessages((current) => [...current, userMessage]);
+    }
     return(
         <div className="flex flex-col h-full p-4 space-y-2">
            <ChatHeader companion = {companion} />
+           <div>
+            Messages go here
+           </div>
         </div>
     )
 }
