@@ -2,7 +2,7 @@
 
 import { Companion, Message} from "@prisma/client"
 import { ChatHeader } from "@/components/chat-header"
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCompletion } from "ai/react"
 
