@@ -17,7 +17,7 @@ export const ChatForm = ({input, handleInputChange, onSubmit, isLoading}: ChatFo
         <form onSubmit={onSubmit} className="border-t border-primary/10 py-4 flex items-center gap-x-2">
             <Input disabled={isLoading} value={input} onChange={handleInputChange} placeholder="Type a message.." className="rounded-lg bg-primary/10"/>
             <Button disabled={isLoading} variant="ghost">
-                <SendHorizonal />
+                <SendHorizonal className="h-6 w-6" />
             </Button>
         
         </form>
