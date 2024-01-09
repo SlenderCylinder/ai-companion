@@ -7,6 +7,7 @@ import { ChatMessages } from "@/components/chat-messages";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { useCompletion } from "ai/react"
+import { ChatMessageProps } from "@/components/chat-message";
 
 interface ChatClientProps{
     companion: Companion & {
@@ -17,26 +18,36 @@ interface ChatClientProps{
     }
 }
 
-export const ChatClient = ({companion}: ChatClientProps) => {
+export const ChatClient = ({
+  companion,
+}: ChatClientProps) => {
+  const router = useRouter();
+  const [messages, setMessages] = useState<ChatMessageProps[]>(companion.messages);
+  
+  const {
+    input,
+    isLoading,
+    handleInputChange,
+    handleSubmit,
+    setInput,
+  } = useCompletion({
+    api: `/api/chat/${companion.id}`,
+    onFinish(_prompt, completion) {
+      const systemMessage: ChatMessageProps = {
+        role: "system",
+        content: completion
+      };
 
-    const router = useRouter();
-    const [messages, setMessages] = useState<any[]>(companion.messages);
-    const {input, isLoading, handleInputChange, handleSubmit, setInput} = useCompletion(
-        {api:`/api/chat/${companion.id}`, onFinish(prompt, completion) {
-            const systemMessage = {
-                role: "system",
-                content: completion,
-            }
+      setMessages((current) => [...current, systemMessage]);
+      setInput("");
 
-            setMessages((current) => [...current, systemMessage]);
-            setInput("");
-
-            router.refresh();
-    }});
+      router.refresh();
+    },
+  });
 
     const onSubmit = (E: FormEvent<HTMLFormElement>) => {
-        const userMessage = {
-            role: "user",
+        const userMessage: ChatMessageProps = {
+            role: "userId",
             content: input,
         };
 

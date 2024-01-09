@@ -1,12 +1,18 @@
 "use client"
 
 import { useTheme } from "next-themes";
-import { useToast } from "./ui/use-toast";
+import { BeatLoader } from "react-spinners";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { BotAvatar } from "./bot-avatar";
+import { BotAvatar } from "@/components/bot-avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
+import { Button } from "@/components/ui/button";
+import { Copy } from "lucide-react";
+
+type Role = "system" | "userId";
 
 export interface ChatMessageProps {
-    role: "system" | "user",
+    role: Role,
     content?: string;
     isLoading?: boolean;
     src?: string;
@@ -31,13 +37,24 @@ export const ChatMessage = ({role, content, isLoading, src}: ChatMessageProps) =
     return (
         <div className={cn(
             "group flex items-start gap-x-3 py-4 w-full",
-            role == "user" && "justify-end"
+            role == "userId" && "justify-end"
         )}>
-            {role !== "user" && src && <BotAvatar src={src} />}
+            {role !== "userId" && src && <BotAvatar src={src} />}
             <div className="rounded-md px-4 py-2 max-w-sm text-sm bg-primary/10">
                 {isLoading
-                ? "Loading...": content}
+                ? <BeatLoader size={5} color={theme == "light" ? "black" : "white"} />: content}
+            
             </div>
+            {role == "userId" && <UserAvatar/>}
+            {role !== "userId" && !isLoading && (
+                <Button
+                    onClick={onCopy}
+                    className="opacity-0 group-hover:opacity-100 transition"
+                    size="icon"
+                    variant="ghost">
+                        <Copy className="w-4 h-4"/>
+                    </Button>
+            )}
         </div>
     )
 }
