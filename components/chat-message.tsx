@@ -9,10 +9,9 @@ import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 
-type Role = "system" | "userId";
 
 export interface ChatMessageProps {
-    role: Role,
+    role: "system" | "user",
     content?: string;
     isLoading?: boolean;
     src?: string;
@@ -37,16 +36,16 @@ export const ChatMessage = ({role, content, isLoading, src}: ChatMessageProps) =
     return (
         <div className={cn(
             "group flex items-start gap-x-3 py-4 w-full",
-            role == "userId" && "justify-end"
+            role == "user" && "justify-end"
         )}>
-            {role !== "userId" && src && <BotAvatar src={src} />}
+            {role !== "user" && src && <BotAvatar src={src} />}
             <div className="rounded-md px-4 py-2 max-w-sm text-sm bg-primary/10">
                 {isLoading
                 ? <BeatLoader size={5} color={theme == "light" ? "black" : "white"} />: content}
             
             </div>
-            {role == "userId" && <UserAvatar/>}
-            {role !== "userId" && !isLoading && (
+            {role == "user" && <UserAvatar/>}
+            {role !== "user" && !isLoading && (
                 <Button
                     onClick={onCopy}
                     className="opacity-0 group-hover:opacity-100 transition"

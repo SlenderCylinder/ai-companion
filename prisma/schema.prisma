@@ -41,7 +41,7 @@ model Companion {
 }
 
 enum Role {
-  userId
+  user
   system
 }
 

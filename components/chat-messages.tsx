@@ -20,7 +20,7 @@ export const ChatMessages = ({messages = [], isLoading, companion}: ChatMessages
                 content={`Hello! I am ${companion.name}, ${companion.description}`}
             />
             <ChatMessage
-                role="userId"
+                role="user"
                 content={`Hello! I am ${companion.name}, ${companion.description}`}
             />
         </div>

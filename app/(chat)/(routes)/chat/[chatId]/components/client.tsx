@@ -47,7 +47,7 @@ export const ChatClient = ({
 
     const onSubmit = (E: FormEvent<HTMLFormElement>) => {
         const userMessage: ChatMessageProps = {
-            role: "userId",
+            role: "user",
             content: input,
         };
 
