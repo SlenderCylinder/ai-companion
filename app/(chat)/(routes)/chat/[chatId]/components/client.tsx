@@ -1,22 +1,23 @@
-"use client"
+"use client";
 
-import { Companion, Message} from "@prisma/client"
-import { ChatHeader } from "@/components/chat-header"
-import { ChatForm } from "@/components/chat-form";
-import { ChatMessages } from "@/components/chat-messages";
-import { useRouter } from "next/navigation";
+import { useCompletion } from "ai/react";
 import { FormEvent, useState } from "react";
-import { useCompletion } from "ai/react"
+import { Companion, Message } from "@prisma/client";
+import { useRouter } from "next/navigation";
+
+import { ChatForm } from "@/components/chat-form";
+import { ChatHeader } from "@/components/chat-header";
+import { ChatMessages } from "@/components/chat-messages";
 import { ChatMessageProps } from "@/components/chat-message";
 
-interface ChatClientProps{
-    companion: Companion & {
-        messages: Message[];
-        _count: {
-            messages: number;
-        }
+interface ChatClientProps {
+  companion: Companion & {
+    messages: Message[];
+    _count: {
+      messages: number;
     }
-}
+  };
+};
 
 export const ChatClient = ({
   companion,
@@ -45,28 +46,31 @@ export const ChatClient = ({
     },
   });
 
-    const onSubmit = (E: FormEvent<HTMLFormElement>) => {
-        const userMessage: ChatMessageProps = {
-            role: "user",
-            content: input,
-        };
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const userMessage: ChatMessageProps = {
+      role: "user",
+      content: input
+    };
 
-        setMessages((current) => [...current, userMessage]);
-    }
-    return(
-        <div className="flex flex-col h-full p-4 space-y-2">
-           <ChatHeader companion = {companion} />
-           <ChatMessages
-                companion={companion}
-                isLoading={isLoading}
-                messages={messages}
-            />
-           <ChatForm
-                isLoading={isLoading}
-                input={input}
-                handleInputChange={handleInputChange}
-                onSubmit={onSubmit}
-            />
-        </div>
-    )
+    setMessages((current) => [...current, userMessage]);
+
+    handleSubmit(e);
+  }
+
+  return (
+    <div className="flex flex-col h-full p-4 space-y-2">
+      <ChatHeader companion={companion} />
+      <ChatMessages 
+        companion={companion}
+        isLoading={isLoading}
+        messages={messages}
+      />
+      <ChatForm 
+        isLoading={isLoading} 
+        input={input} 
+        handleInputChange={handleInputChange} 
+        onSubmit={onSubmit} 
+      />
+    </div>
+   );
 }

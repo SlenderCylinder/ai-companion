@@ -8,7 +8,7 @@ import { BotAvatar } from "@/components/bot-avatar";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
-"handleauto refresh issue"
+
 export interface ChatMessageProps {
     role: "system" | "user",
     content?: string;
