@@ -17,9 +17,20 @@ export class MemoryManager {
 
     private constructor() {
         this.history = Redis.fromEnv();
+
+        const PineapiKey = process.env.PINECONE_API!;
+        if (!PineapiKey) {
+          throw new Error('Pinecone API key is missing.');
+        }
         this.vectorDBClient = new Pinecone({
-            apiKey: process.env.PINECONE_API_KEY!,
-        });
+            apiKey: PineapiKey!,
+            
+        }
+        
+        );
+
+        
+
     }
 
     public async vectorSearch(
@@ -86,7 +97,7 @@ export class MemoryManager {
         return recentChats;
     }
 
-    public async sendChatHistory(
+    public async seedChatHistory(
         seedContent: string,
         delimiter: string = "\n",
         companionKey: CompanionKey
