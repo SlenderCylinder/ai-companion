@@ -7,6 +7,7 @@ import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle";
 import { MobileSidebar } from "@/components/mobile-sidebar";
+import { userProModal } from "@/hooks/use-pro-model";
 
 
 const font = Poppins({
@@ -15,6 +16,9 @@ const font = Poppins({
 });
 
 export const Navbar = () => {
+
+    const ProModal = userProModal()
+
     return (
         <div className="fixed w-full z-50 flex justify-between items-center py-2 px-4 border-b border-primary/10 bg-seconday h-16">
             <div className="flex items-center">
@@ -27,7 +31,7 @@ export const Navbar = () => {
                 </Link>
             </div>
             <div className="flex items-center gap-x-3">
-                <Button size="sm" variant="premium">
+                <Button size="sm" variant="premium" onClick={ProModal.onOpen}>
                   Upgrade
                   <Sparkles className="h-4 w-4 fill-white text-white ml-2"/>
                 </Button>
