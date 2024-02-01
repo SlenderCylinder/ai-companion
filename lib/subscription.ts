@@ -1,6 +1,8 @@
 import { auth } from "@clerk/nextjs";
 import prismadb from "./prismadb";
 
+//need to update subscription data when plan is canceled 
+
 const DAY_IN_MS = 86_400_000;
 
 export const checkSubscription = async () => {
